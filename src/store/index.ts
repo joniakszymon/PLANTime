@@ -6,6 +6,7 @@ export default createStore({
   state: {
     plants: {},
     searchValue: "",
+    gardenPlants: [] as Array<any>,
   },
   getters: {},
   mutations: {
@@ -14,6 +15,9 @@ export default createStore({
     },
     setSearchValue(state, value) {
       state.searchValue = value;
+    },
+    setGardenPlants(state, plant) {
+      state.gardenPlants.push(plant);
     },
   },
   actions: {

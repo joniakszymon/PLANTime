@@ -2,7 +2,12 @@
   <h1>Plants</h1>
   <Search @search-value="filterPlants" />
   <div class="plants-container">
-    <div v-for="plant in plants.data" :key="plant.id" class="plant-wrapper">
+    <div
+      v-for="plant in plants.data"
+      :key="plant.id"
+      class="plant-wrapper"
+      @click="setDataToStore(plant)"
+    >
       <div class="plant-img">
         <img
           :src="
@@ -18,6 +23,10 @@
         <p>Family: {{ plant.family }}</p>
         <p>Genus: {{ plant.genus }}</p>
         <p>Scientific name: {{ plant.scientific_name }}</p>
+      </div>
+      <div class="overlay">
+        <span class="plus">+</span>
+        <span>Add to garden</span>
       </div>
     </div>
   </div>
@@ -74,12 +83,15 @@ export default defineComponent({
         searchValue: newVal,
       });
     },
+    setDataToStore(plant: any) {
+      this.$store.commit("setGardenPlants", plant);
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .plants-container {
   display: grid;
   gap: 25px;
@@ -87,11 +99,37 @@ export default defineComponent({
   .plant-wrapper {
     display: flex;
     flex-direction: column;
+    position: relative;
     border-radius: 15px;
     border: 1px solid #a5a5a5;
     background-color: #fff;
     overflow: hidden;
     transition: all 0.4s;
+    .overlay {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      right: -200px;
+      width: 0;
+      bottom: 0;
+      content: "";
+      background-color: #0c864d;
+      z-index: 2;
+      opacity: 1;
+      transition: all 0.6s;
+      span {
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bolder;
+        &.plus {
+          font-size: 38px;
+        }
+      }
+    }
     h3 {
       margin: 0 0 20px;
     }
@@ -110,6 +148,11 @@ export default defineComponent({
       box-shadow: 0 0 10px 3px #dbdbdb;
       cursor: pointer;
       transform: scale(1.02);
+      .overlay {
+        opacity: 0.92;
+        width: 100%;
+        right: 0;
+      }
     }
   }
 }
